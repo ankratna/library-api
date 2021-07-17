@@ -49,7 +49,7 @@ public class BookController {
 
 	@PostMapping("/Search")
 	@ResponseStatus(HttpStatus.OK)
-	public Set<BookDTO> searchByAnyField(@RequestBody BookDTO bookDTO){
+	public Set<BookDTO> searchByAnyField(@RequestBody BookDTO bookDTO) {
 		return null;
 	}
 
