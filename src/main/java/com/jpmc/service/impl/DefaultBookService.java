@@ -7,7 +7,9 @@ import com.jpmc.entity.Book;
 import com.jpmc.entity.Tag;
 import com.jpmc.exception.BookAlreadyExistException;
 import com.jpmc.exception.BookNotFoundException;
+import com.jpmc.mapper.BookMapper;
 import com.jpmc.service.BookService;
+import com.jpmc.service.Search.SearchStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +24,19 @@ public class DefaultBookService implements BookService {
 	private static final Logger LOG = LoggerFactory.getLogger(DefaultBookService.class);
 
 	private final BookRepository bookRepository;
-
 	private final TagRepository tagRepository;
+	private final BookMapper bookMapper;
+	private final SearchStrategy searchWithAnyMatch;
 
 	@Autowired
-	public DefaultBookService(final BookRepository bookRepository, final TagRepository tagRepository) {
+	public DefaultBookService(BookRepository bookRepository,
+							  TagRepository tagRepository,
+							  BookMapper bookMapper,
+								SearchStrategy searchWithAnyMatch) {
 		this.bookRepository = bookRepository;
 		this.tagRepository = tagRepository;
+		this.bookMapper = bookMapper;
+		this.searchWithAnyMatch = searchWithAnyMatch;
 	}
 
 	@Override
@@ -40,7 +48,7 @@ public class DefaultBookService implements BookService {
 		}
 
 		Book book = new Book();
-		mapDtoToEntity(bookDTO, book);
+		bookMapper.mapDtoToEntity(bookDTO, book);
 		bookRepository.save(book);
 
 		LOG.info(String.format("Book with isbn : %s successfully created", book.getIsbn()));
@@ -52,7 +60,7 @@ public class DefaultBookService implements BookService {
 		Set<BookDTO> allBooksDto = new HashSet<>();
 
 		bookRepository.findAll().stream().filter(book -> !book.getDeleted()).forEach(book -> {
-			BookDTO bookDTO = mapEntityToDto(book);
+			BookDTO bookDTO = bookMapper.mapEntityToDto(book);
 			allBooksDto.add(bookDTO);
 		});
 
@@ -83,19 +91,21 @@ public class DefaultBookService implements BookService {
 	@Override
 	public Set<BookDTO> getAllBooksWithAnyInputSearchTagPresent(List<String> tagNames) {
 
-		Set<Long> isbnSetForAllInputTags = new HashSet<>();
+		return searchWithAnyMatch.searchByTagList(tagNames);
+
+		/*Set<Long> isbnSetForAllInputTags = new HashSet<>();
 		for (String tagName : tagNames) {
 			Set<Long> isbnSetForTag = getSetOfIsbnForGivenTag(tagName);
 			isbnSetForAllInputTags.addAll(isbnSetForTag);
 		}
 
 		Set<BookDTO> booksDto = isbnSetForAllInputTags.stream().map(isbn -> bookRepository.findByIsbn(isbn))
-				.map(book -> mapEntityToDto(book)).collect(Collectors.toSet());
+				.map(book -> bookMapper.mapEntityToDto(book)).collect(Collectors.toSet());
 
-		return booksDto;
+		return booksDto;*/
 	}
 
-	private Set<Long> getSetOfIsbnForGivenTag(String tagName) {
+/*	private Set<Long> getSetOfIsbnForGivenTag(String tagName) {
 		Set<Long> isbnSetOfTag = new HashSet<>();
 		Tag tag = tagRepository.findByName(tagName);
 		if (Objects.nonNull(tag)) {
@@ -105,14 +115,14 @@ public class DefaultBookService implements BookService {
 			}
 		}
 		return isbnSetOfTag;
-	}
+	}*/
 
 	private boolean isBookAlreadyExist(Long isbn) {
 		Book book = bookRepository.findByIsbn(isbn);
 		return Objects.nonNull(book) && !book.getDeleted();
 	}
 
-	private void mapDtoToEntity(BookDTO bookDTO, Book book) {
+/*	private void mapDtoToEntity(BookDTO bookDTO, Book book) {
 		book.setIsbn(bookDTO.getIsbn());
 		book.setAuthor(bookDTO.getAuthor());
 		book.setTitle(bookDTO.getTitle());
@@ -139,6 +149,6 @@ public class DefaultBookService implements BookService {
 		responseDto.setTitle(book.getTitle());
 		responseDto.setTags(book.getTags().stream().map(Tag::getName).collect(Collectors.toSet()));
 		return responseDto;
-	}
+	}*/
 
 }

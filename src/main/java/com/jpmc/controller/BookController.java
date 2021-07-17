@@ -47,4 +47,10 @@ public class BookController {
 		return bookService.getAllBooksWithAnyInputSearchTagPresent(tags);
 	}
 
+	@PostMapping("/Search")
+	@ResponseStatus(HttpStatus.OK)
+	public Set<BookDTO> searchByAnyField(@RequestBody BookDTO bookDTO){
+		return null;
+	}
+
 }
