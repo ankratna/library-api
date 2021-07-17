@@ -10,98 +10,106 @@ import javax.validation.constraints.NotNull;
 @Table(name = "book")
 public class BookDO {
 
-    @Id
-    @NotNull(message = "isbn number can not be null")
-    private Long isbn;
+	@Id
+	@NotNull(message = "isbn number can not be null")
+	private Long isbn;
 
-    @Column(nullable = false)
-    @NotNull(message = "title of book can not be null")
-    private String title;
+	@Column(nullable = false)
+	@NotNull(message = "title of book can not be null")
+	private String title;
 
-    @Column(nullable = false)
-    @NotNull(message = "author of book can not be null")
-    private String author;
+	@Column(nullable = false)
+	@NotNull(message = "author of book can not be null")
+	private String author;
 
-    @Column(nullable = false)
-    private Boolean deleted = false;
+	@Column(nullable = false)
+	private Boolean deleted = false;
 
-    public Long getIsbn() {
-        return isbn;
-    }
+	public Long getIsbn() {
+		return isbn;
+	}
 
-    public void setIsbn(Long isbn) {
-        this.isbn = isbn;
-    }
+	public void setIsbn(Long isbn) {
+		this.isbn = isbn;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public String getAuthor() {
-        return author;
-    }
+	public String getAuthor() {
+		return author;
+	}
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
+	public void setAuthor(String author) {
+		this.author = author;
+	}
 
-    public Boolean getDeleted() {
-        return deleted;
-    }
+	public Boolean getDeleted() {
+		return deleted;
+	}
 
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
 
-    private BookDO() {
-    }
+	private BookDO() {
+	}
 
-    public static BookDOBuilder newBuilder(){return new BookDOBuilder();}
+	public static BookDOBuilder newBuilder() {
+		return new BookDOBuilder();
+	}
 
-    public static final class BookDOBuilder {
-        private Long isbn;
-        private String title;
-        private String author;
-        private Boolean deleted = false;
+	public static final class BookDOBuilder {
 
-        private BookDOBuilder() {
-        }
+		private Long isbn;
 
-        public static BookDOBuilder aBookDO() {
-            return new BookDOBuilder();
-        }
+		private String title;
 
-        public BookDOBuilder withIsbn(Long isbn) {
-            this.isbn = isbn;
-            return this;
-        }
+		private String author;
 
-        public BookDOBuilder withTitle(String title) {
-            this.title = title;
-            return this;
-        }
+		private Boolean deleted = false;
 
-        public BookDOBuilder withAuthor(String author) {
-            this.author = author;
-            return this;
-        }
+		private BookDOBuilder() {
+		}
 
-        public BookDOBuilder withDeleted(Boolean deleted) {
-            this.deleted = deleted;
-            return this;
-        }
+		public static BookDOBuilder aBookDO() {
+			return new BookDOBuilder();
+		}
 
-        public BookDO build() {
-            BookDO bookDO = new BookDO();
-            bookDO.setIsbn(isbn);
-            bookDO.setTitle(title);
-            bookDO.setAuthor(author);
-            bookDO.setDeleted(deleted);
-            return bookDO;
-        }
-    }
+		public BookDOBuilder withIsbn(Long isbn) {
+			this.isbn = isbn;
+			return this;
+		}
+
+		public BookDOBuilder withTitle(String title) {
+			this.title = title;
+			return this;
+		}
+
+		public BookDOBuilder withAuthor(String author) {
+			this.author = author;
+			return this;
+		}
+
+		public BookDOBuilder withDeleted(Boolean deleted) {
+			this.deleted = deleted;
+			return this;
+		}
+
+		public BookDO build() {
+			BookDO bookDO = new BookDO();
+			bookDO.setIsbn(isbn);
+			bookDO.setTitle(title);
+			bookDO.setAuthor(author);
+			bookDO.setDeleted(deleted);
+			return bookDO;
+		}
+
+	}
+
 }

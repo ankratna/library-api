@@ -1,98 +1,102 @@
 package com.jpmc.datatransferobject;
 
-
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class BookDTO {
 
-    @NotNull(message = "isbn number can not be null")
-    private Long isbn;
+	@NotNull(message = "isbn number can not be null")
+	private Long isbn;
 
-    @NotNull(message = "title of book can not be null")
-    private String title;
+	@NotNull(message = "title of book can not be null")
+	private String title;
 
-    @NotNull(message = "author of can not be null")
-    private String author;
+	@NotNull(message = "author of can not be null")
+	private String author;
 
-    private List<String> tags;
+	private List<String> tags;
 
-    public Long getIsbn() {
-        return isbn;
-    }
+	public Long getIsbn() {
+		return isbn;
+	}
 
-    public void setIsbn(Long isbn) {
-        this.isbn = isbn;
-    }
+	public void setIsbn(Long isbn) {
+		this.isbn = isbn;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public String getAuthor() {
-        return author;
-    }
+	public String getAuthor() {
+		return author;
+	}
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
+	public void setAuthor(String author) {
+		this.author = author;
+	}
 
-    public List<String> getTags() {
-        return tags;
-    }
+	public List<String> getTags() {
+		return tags;
+	}
 
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-    }
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
 
-    private BookDTO() {
-    }
+	private BookDTO() {
+	}
 
+	public static final class BookDTOBuilder {
 
-    public static final class BookDTOBuilder {
-        private Long isbn;
-        private String title;
-        private String author;
-        private List<String> tags;
+		private Long isbn;
 
-        private BookDTOBuilder() {
-        }
+		private String title;
 
-        public static BookDTOBuilder BookDTO() {
-            return new BookDTOBuilder();
-        }
+		private String author;
 
-        public BookDTOBuilder withIsbn(Long isbn) {
-            this.isbn = isbn;
-            return this;
-        }
+		private List<String> tags;
 
-        public BookDTOBuilder withTitle(String title) {
-            this.title = title;
-            return this;
-        }
+		private BookDTOBuilder() {
+		}
 
-        public BookDTOBuilder withAuthor(String author) {
-            this.author = author;
-            return this;
-        }
+		public static BookDTOBuilder BookDTO() {
+			return new BookDTOBuilder();
+		}
 
-        public BookDTOBuilder withTags(List<String> tags) {
-            this.tags = tags;
-            return this;
-        }
+		public BookDTOBuilder withIsbn(Long isbn) {
+			this.isbn = isbn;
+			return this;
+		}
 
-        public BookDTO build() {
-            BookDTO bookDTO = new BookDTO();
-            bookDTO.setIsbn(isbn);
-            bookDTO.setTitle(title);
-            bookDTO.setAuthor(author);
-            bookDTO.setTags(tags);
-            return bookDTO;
-        }
-    }
+		public BookDTOBuilder withTitle(String title) {
+			this.title = title;
+			return this;
+		}
+
+		public BookDTOBuilder withAuthor(String author) {
+			this.author = author;
+			return this;
+		}
+
+		public BookDTOBuilder withTags(List<String> tags) {
+			this.tags = tags;
+			return this;
+		}
+
+		public BookDTO build() {
+			BookDTO bookDTO = new BookDTO();
+			bookDTO.setIsbn(isbn);
+			bookDTO.setTitle(title);
+			bookDTO.setAuthor(author);
+			bookDTO.setTags(tags);
+			return bookDTO;
+		}
+
+	}
+
 }
