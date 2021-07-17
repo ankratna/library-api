@@ -25,11 +25,9 @@ public class DefaultBookService implements BookService {
 
 	private final TagRepository tagRepository;
 
-	// @Autowired
-	private BookMapper bookMapper;
+	private final BookMapper bookMapper;
 
-	// @Autowired
-	private SearchStrategy searchWithAnyMatch;
+	private final SearchStrategy searchWithAnyMatch;
 
 	@Autowired
 	public DefaultBookService(BookRepository bookRepository, TagRepository tagRepository, BookMapper bookMapper,
@@ -91,50 +89,12 @@ public class DefaultBookService implements BookService {
 
 	@Override
 	public Set<BookDTO> getAllBooksWithAnyInputSearchTagPresent(List<String> tagNames) {
-
 		return searchWithAnyMatch.searchByTagList(tagNames);
-
-		/*
-		 * Set<Long> isbnSetForAllInputTags = new HashSet<>(); for (String tagName :
-		 * tagNames) { Set<Long> isbnSetForTag = getSetOfIsbnForGivenTag(tagName);
-		 * isbnSetForAllInputTags.addAll(isbnSetForTag); }
-		 *
-		 * Set<BookDTO> booksDto = isbnSetForAllInputTags.stream().map(isbn ->
-		 * bookRepository.findByIsbn(isbn)) .map(book ->
-		 * bookMapper.mapEntityToDto(book)).collect(Collectors.toSet());
-		 *
-		 * return booksDto;
-		 */
 	}
-
-	/*
-	 * private Set<Long> getSetOfIsbnForGivenTag(String tagName) { Set<Long> isbnSetOfTag
-	 * = new HashSet<>(); Tag tag = tagRepository.findByName(tagName); if
-	 * (Objects.nonNull(tag)) { Set<Book> books = tag.getBooks(); for (Book book : books)
-	 * { isbnSetOfTag.add(book.getIsbn()); } } return isbnSetOfTag; }
-	 */
 
 	private boolean isBookAlreadyExist(Long isbn) {
 		Book book = bookRepository.findByIsbn(isbn);
 		return Objects.nonNull(book) && !book.getDeleted();
 	}
-
-	/*
-	 * private void mapDtoToEntity(BookDTO bookDTO, Book book) {
-	 * book.setIsbn(bookDTO.getIsbn()); book.setAuthor(bookDTO.getAuthor());
-	 * book.setTitle(bookDTO.getTitle());
-	 *
-	 * if (Objects.isNull(book.getTags())) { book.setTags(new HashSet<>()); }
-	 *
-	 * bookDTO.getTags().stream().forEach(tagName -> { Tag tag =
-	 * tagRepository.findByName(tagName); if (Objects.isNull(tag)) { tag = new Tag();
-	 * tag.setBooks(new HashSet<>()); } tag.setName(tagName); book.addTag(tag); }); }
-	 *
-	 * private BookDTO mapEntityToDto(Book book) { BookDTO responseDto = new BookDTO();
-	 * responseDto.setIsbn(book.getIsbn()); responseDto.setAuthor(book.getAuthor());
-	 * responseDto.setTitle(book.getTitle());
-	 * responseDto.setTags(book.getTags().stream().map(Tag::getName).collect(Collectors.
-	 * toSet())); return responseDto; }
-	 */
 
 }

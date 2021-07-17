@@ -5,7 +5,6 @@ import com.jpmc.dto.BookDTO;
 import com.jpmc.entity.Book;
 import com.jpmc.entity.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -17,10 +16,6 @@ public class BookMapper {
 
 	@Autowired
 	private TagRepository tagRepository;
-
-	// public BookMapper(TagRepository tagRepository){
-	// this.tagRepository = tagRepository;
-	// }
 
 	public void mapDtoToEntity(BookDTO bookDTO, Book book) {
 		book.setIsbn(bookDTO.getIsbn());
