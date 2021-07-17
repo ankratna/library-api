@@ -80,6 +80,26 @@ public class DefaultBookService implements BookService {
 		return String.format("Book with ISBN: %s is deleted", book.getIsbn());
 	}
 
+	@Override
+	public Set<BookDTO> getAllBooksWithTags(List<String> tagNames) {
+
+		Set<Long> isbnSet = new HashSet<>();
+		for (String tagName : tagNames) {
+			Tag tag = tagRepository.findByName(tagName);
+			if (Objects.nonNull(tag)) {
+				Set<Book> books = tag.getBooks();
+				for (Book book : books) {
+					isbnSet.add(book.getIsbn());
+				}
+			}
+		}
+
+		Set<BookDTO> booksDto = isbnSet.stream().map(isbn -> bookRepository.findByIsbn(isbn))
+				.map(book -> mapEntityToDto(book)).collect(Collectors.toSet());
+
+		return booksDto;
+	}
+
 	private boolean isBookAlreadyExist(Long isbn) {
 		Book book = bookRepository.findByIsbn(isbn);
 		return Objects.nonNull(book) && !book.getDeleted();

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -20,24 +21,30 @@ public class BookController {
 		this.bookService = bookService;
 	}
 
-	@PostMapping
+	@PostMapping("/addBook")
 	@ResponseStatus(HttpStatus.CREATED)
 	public BookDTO addBook(@Valid @RequestBody BookDTO bookDTO) throws Exception {
 		return bookService.addBook(bookDTO);
 
 	}
 
-	@GetMapping
+	@GetMapping("/getAllBooks")
 	@ResponseStatus(HttpStatus.OK)
 	public Set<BookDTO> getAllBooks() {
 		return bookService.getAllBooks();
 	}
 
-	@DeleteMapping("/{isbn}")
+	@DeleteMapping("/deleteBook/{isbn}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public String deleteBook(@PathVariable Long isbn) throws Exception {
 		return bookService.deleteBook(isbn);
+	}
+
+	@PostMapping("/getAllBooksWithTags")
+	@ResponseStatus(HttpStatus.OK)
+	public Set<BookDTO> getAllBooksWithTags(@RequestBody List<String> tags) {
+		return bookService.getAllBooksWithTags(tags);
 	}
 
 }
