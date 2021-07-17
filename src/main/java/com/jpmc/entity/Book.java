@@ -49,7 +49,7 @@ public class Book {
 	}
 
 	public void removeTags() {
-		for (Tag course : new HashSet<>(tags)) {
+		for (Tag course : new HashSet<>(this.getTags())) {
 			removeTag(course);
 		}
 	}

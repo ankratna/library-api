@@ -23,22 +23,20 @@ public class BookController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public BookDTO addBook(@Valid @RequestBody BookDTO bookDTO) throws Exception {
-		BookDTO book = bookService.addBook(bookDTO);
-		return book;
+		return bookService.addBook(bookDTO);
+
 	}
 
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public Set<BookDTO> getAllBooks() {
-		Set<BookDTO> books = bookService.getAllBooks();
-		return books;
+		return bookService.getAllBooks();
 	}
 
 	@DeleteMapping("/{isbn}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public String deleteBook(@PathVariable Long isbn) throws Exception {
-		// Long id = new Long(isbn);
 		return bookService.deleteBook(isbn);
 	}
 

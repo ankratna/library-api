@@ -22,6 +22,4 @@ public class BookDTO {
 
 	private Set<String> tags = new HashSet();
 
-	;
-
 }

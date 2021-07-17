@@ -64,11 +64,18 @@ public class DefaultBookService implements BookService {
 		Book book = bookRepository.findByIsbn((Long) isbn);
 
 		if (Objects.isNull(book)) {
-			throw new BookNotFoundException(String.format("Book with ISBN: %s does not exist", isbn));
+			String message = String.format("Book with ISBN: %s does not exist", isbn);
+			LOG.warn(message);
+			throw new BookNotFoundException(message);
 		}
 
 		book.removeTags();
 		bookRepository.deleteById(book.getId());
+
+		/*
+		 * In case we do not hard delete we can just toggle the deleted flag
+		 * book.setDeleted(true); bookRepository.save(book);
+		 */
 
 		return String.format("Book with ISBN: %s is deleted", book.getIsbn());
 	}
