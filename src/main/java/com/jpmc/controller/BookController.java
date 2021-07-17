@@ -34,4 +34,12 @@ public class BookController {
 		return books;
 	}
 
+	@DeleteMapping("/{isbn}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public String deleteBook(@PathVariable Long isbn) throws Exception {
+		// Long id = new Long(isbn);
+		return bookService.deleteBook(isbn);
+	}
+
 }

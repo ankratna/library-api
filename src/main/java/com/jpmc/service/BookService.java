@@ -10,4 +10,6 @@ public interface BookService {
 
 	public Set<BookDTO> getAllBooks();
 
+	public String deleteBook(Long isbn) throws Exception;
+
 }

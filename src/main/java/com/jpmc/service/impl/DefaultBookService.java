@@ -6,15 +6,14 @@ import com.jpmc.dto.BookDTO;
 import com.jpmc.entity.Book;
 import com.jpmc.entity.Tag;
 import com.jpmc.exception.BookAlreadyExistException;
+import com.jpmc.exception.BookNotFoundException;
 import com.jpmc.service.BookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,6 +57,20 @@ public class DefaultBookService implements BookService {
 		});
 
 		return allBooksDto;
+	}
+
+	@Override
+	public String deleteBook(Long isbn) throws Exception {
+		Book book = bookRepository.findByIsbn((Long) isbn);
+
+		if (Objects.isNull(book)) {
+			throw new BookNotFoundException(String.format("Book with ISBN: %s does not exist", isbn));
+		}
+
+		book.removeTags();
+		bookRepository.deleteById(book.getId());
+
+		return String.format("Book with ISBN: %s is deleted", book.getIsbn());
 	}
 
 	private boolean isBookAlreadyExist(Long isbn) {
