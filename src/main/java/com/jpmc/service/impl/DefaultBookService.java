@@ -1,16 +1,18 @@
 package com.jpmc.service.impl;
 
 import com.jpmc.dataaccessobject.BookRepository;
-import com.jpmc.domainobject.BookDO;
+import com.jpmc.dataaccessobject.TagRepository;
+import com.jpmc.datatransferobject.BookDTO;
+import com.jpmc.domainobject.Book;
+import com.jpmc.domainobject.Tag;
 import com.jpmc.exception.BookAlreadyExistException;
-import com.jpmc.exception.ConstraintsViolationException;
 import com.jpmc.service.BookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import java.util.HashSet;
+import java.util.Objects;
 
 @Service
 public class DefaultBookService implements BookService {
@@ -19,32 +21,53 @@ public class DefaultBookService implements BookService {
 
 	private final BookRepository bookRepository;
 
-	public DefaultBookService(final BookRepository bookRepository) {
+	private final TagRepository tagRepository;
+
+	@Autowired
+	public DefaultBookService(final BookRepository bookRepository, final TagRepository tagRepository) {
 		this.bookRepository = bookRepository;
+		this.tagRepository = tagRepository;
 	}
 
 	@Override
-	public void createBook(BookDO bookDO) throws Exception {
-		if (isBookAlreadyExist(bookDO.getIsbn())) {
-			String message = String.format("Book already Exist in Database with isbn: %s", bookDO.getIsbn());
+	public BookDTO addBook(BookDTO bookDTO) throws Exception {
+		if (isBookAlreadyExist(bookDTO.getIsbn())) {
+			String message = String.format("Book already Exist in Database with isbn: %s", bookDTO.getIsbn());
 			LOG.warn(message);
 			throw new BookAlreadyExistException(message);
 		}
 
-		BookDO book;
-		try {
-			book = bookRepository.save(bookDO);
-		}
-		catch (DataIntegrityViolationException e) {
-			throw new ConstraintsViolationException(e.getMessage());
-		}
-		System.out.println("book created successfully");
+		Book book = new Book();
+		mapDtoToEntity(bookDTO, book);
+		bookRepository.save(book);
 
+		LOG.info(String.format("Book with isbn : %s successfully created", book.getIsbn()));
+		return bookDTO;
 	}
 
 	private boolean isBookAlreadyExist(Long isbn) {
-		Optional<BookDO> bookDO = bookRepository.findById(isbn);
-		return bookDO.isPresent() && !bookDO.get().getDeleted();
+		Book book = bookRepository.findByIsbn(isbn);
+		return Objects.nonNull(book) && !book.getDeleted();
+	}
+
+	private void mapDtoToEntity(BookDTO bookDTO, Book book) {
+		book.setIsbn(bookDTO.getIsbn());
+		book.setAuthor(bookDTO.getAuthor());
+		book.setTitle(bookDTO.getTitle());
+
+		if (Objects.isNull(book.getTags())) {
+			book.setTags(new HashSet<>());
+		}
+
+		bookDTO.getTags().stream().forEach(tagName -> {
+			Tag tag = tagRepository.findByName(tagName);
+			if (Objects.isNull(tag)) {
+				tag = new Tag();
+				tag.setBooks(new HashSet<>());
+			}
+			tag.setName(tagName);
+			book.addTag(tag);
+		});
 	}
 
 }

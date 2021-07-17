@@ -1,8 +1,7 @@
 package com.jpmc.controller;
 
 import com.jpmc.datatransferobject.BookDTO;
-import com.jpmc.domainobject.BookDO;
-import com.jpmc.exception.ConstraintsViolationException;
+import com.jpmc.domainobject.Book;
 import com.jpmc.mapper.BookMapper;
 import com.jpmc.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +23,9 @@ public class BookController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public BookDTO insertBook(@Valid @RequestBody BookDTO bookDTO) throws Exception {
-		BookDO bookDO = BookMapper.makeBookDO(bookDTO);
-		System.out.println(bookDO.getAuthor());
-		bookService.createBook(bookDO);
-		return bookDTO;
+	public BookDTO addBook(@Valid @RequestBody BookDTO bookDTO) throws Exception {
+		BookDTO book = bookService.addBook(bookDTO);
+		return book;
 	}
 
 }

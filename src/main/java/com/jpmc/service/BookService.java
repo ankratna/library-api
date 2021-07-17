@@ -1,10 +1,10 @@
 package com.jpmc.service;
 
-import com.jpmc.domainobject.BookDO;
-import com.jpmc.exception.ConstraintsViolationException;
+import com.jpmc.datatransferobject.BookDTO;
+import com.jpmc.domainobject.Book;
 
 public interface BookService {
 
-	void createBook(BookDO bookDO) throws Exception;
+	public BookDTO addBook(BookDTO bookDTO) throws Exception;
 
 }
