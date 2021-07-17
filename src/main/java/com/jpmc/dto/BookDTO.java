@@ -1,4 +1,4 @@
-package com.jpmc.datatransferobject;
+package com.jpmc.dto;
 
 import lombok.Getter;
 import lombok.Setter;

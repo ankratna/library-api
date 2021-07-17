@@ -1,7 +1,6 @@
 package com.jpmc.service;
 
-import com.jpmc.datatransferobject.BookDTO;
-import com.jpmc.domainobject.Book;
+import com.jpmc.dto.BookDTO;
 
 public interface BookService {
 

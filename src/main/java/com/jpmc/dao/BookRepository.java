@@ -1,6 +1,6 @@
-package com.jpmc.dataaccessobject;
+package com.jpmc.dao;
 
-import com.jpmc.domainobject.Book;
+import com.jpmc.entity.Book;
 import org.springframework.data.repository.CrudRepository;
 
 public interface BookRepository extends CrudRepository<Book, Integer> {

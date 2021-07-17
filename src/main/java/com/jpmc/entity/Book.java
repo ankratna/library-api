@@ -1,4 +1,4 @@
-package com.jpmc.domainobject;
+package com.jpmc.entity;
 
 import lombok.Getter;
 import lombok.Setter;

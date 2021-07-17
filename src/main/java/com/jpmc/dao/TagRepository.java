@@ -1,6 +1,6 @@
-package com.jpmc.dataaccessobject;
+package com.jpmc.dao;
 
-import com.jpmc.domainobject.Tag;
+import com.jpmc.entity.Tag;
 import org.springframework.data.repository.CrudRepository;
 
 public interface TagRepository extends CrudRepository<Tag, Integer> {

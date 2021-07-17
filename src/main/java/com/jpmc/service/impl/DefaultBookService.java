@@ -1,10 +1,10 @@
 package com.jpmc.service.impl;
 
-import com.jpmc.dataaccessobject.BookRepository;
-import com.jpmc.dataaccessobject.TagRepository;
-import com.jpmc.datatransferobject.BookDTO;
-import com.jpmc.domainobject.Book;
-import com.jpmc.domainobject.Tag;
+import com.jpmc.dao.BookRepository;
+import com.jpmc.dao.TagRepository;
+import com.jpmc.dto.BookDTO;
+import com.jpmc.entity.Book;
+import com.jpmc.entity.Tag;
 import com.jpmc.exception.BookAlreadyExistException;
 import com.jpmc.service.BookService;
 import org.slf4j.Logger;

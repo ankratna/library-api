@@ -1,7 +1,6 @@
 package com.jpmc.controller;
 
-import com.jpmc.datatransferobject.BookDTO;
-import com.jpmc.domainobject.Book;
+import com.jpmc.dto.BookDTO;
 import com.jpmc.mapper.BookMapper;
 import com.jpmc.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
