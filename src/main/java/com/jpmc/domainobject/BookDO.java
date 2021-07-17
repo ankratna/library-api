@@ -19,8 +19,11 @@ public class BookDO {
     private String title;
 
     @Column(nullable = false)
-    @NotNull(message = "author of can not be null")
+    @NotNull(message = "author of book can not be null")
     private String author;
+
+    @Column(nullable = false)
+    private Boolean deleted = false;
 
     public Long getIsbn() {
         return isbn;
@@ -46,6 +49,14 @@ public class BookDO {
         this.author = author;
     }
 
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
     private BookDO() {
     }
 
@@ -55,11 +66,12 @@ public class BookDO {
         private Long isbn;
         private String title;
         private String author;
+        private Boolean deleted = false;
 
         private BookDOBuilder() {
         }
 
-        public static BookDOBuilder BookDO() {
+        public static BookDOBuilder aBookDO() {
             return new BookDOBuilder();
         }
 
@@ -78,11 +90,17 @@ public class BookDO {
             return this;
         }
 
+        public BookDOBuilder withDeleted(Boolean deleted) {
+            this.deleted = deleted;
+            return this;
+        }
+
         public BookDO build() {
             BookDO bookDO = new BookDO();
             bookDO.setIsbn(isbn);
             bookDO.setTitle(title);
             bookDO.setAuthor(author);
+            bookDO.setDeleted(deleted);
             return bookDO;
         }
     }
