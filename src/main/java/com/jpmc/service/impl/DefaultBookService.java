@@ -12,7 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class DefaultBookService implements BookService {
@@ -45,6 +48,18 @@ public class DefaultBookService implements BookService {
 		return bookDTO;
 	}
 
+	@Override
+	public Set<BookDTO> getAllBooks() {
+		Set<BookDTO> allBooksDto = new HashSet<>();
+
+		bookRepository.findAll().stream().filter(book -> !book.getDeleted()).forEach(book -> {
+			BookDTO bookDTO = mapEntityToDto(book);
+			allBooksDto.add(bookDTO);
+		});
+
+		return allBooksDto;
+	}
+
 	private boolean isBookAlreadyExist(Long isbn) {
 		Book book = bookRepository.findByIsbn(isbn);
 		return Objects.nonNull(book) && !book.getDeleted();
@@ -68,6 +83,15 @@ public class DefaultBookService implements BookService {
 			tag.setName(tagName);
 			book.addTag(tag);
 		});
+	}
+
+	private BookDTO mapEntityToDto(Book book) {
+		BookDTO responseDto = new BookDTO();
+		responseDto.setIsbn(book.getIsbn());
+		responseDto.setAuthor(book.getAuthor());
+		responseDto.setTitle(book.getTitle());
+		responseDto.setTags(book.getTags().stream().map(Tag::getName).collect(Collectors.toSet()));
+		return responseDto;
 	}
 
 }
