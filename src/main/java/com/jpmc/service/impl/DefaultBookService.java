@@ -81,23 +81,30 @@ public class DefaultBookService implements BookService {
 	}
 
 	@Override
-	public Set<BookDTO> getAllBooksWithTags(List<String> tagNames) {
+	public Set<BookDTO> getAllBooksWithAnyInputSearchTagPresent(List<String> tagNames) {
 
-		Set<Long> isbnSet = new HashSet<>();
+		Set<Long> isbnSetForAllInputTags = new HashSet<>();
 		for (String tagName : tagNames) {
-			Tag tag = tagRepository.findByName(tagName);
-			if (Objects.nonNull(tag)) {
-				Set<Book> books = tag.getBooks();
-				for (Book book : books) {
-					isbnSet.add(book.getIsbn());
-				}
-			}
+			Set<Long> isbnSetForTag = getSetOfIsbnForGivenTag(tagName);
+			isbnSetForAllInputTags.addAll(isbnSetForTag);
 		}
 
-		Set<BookDTO> booksDto = isbnSet.stream().map(isbn -> bookRepository.findByIsbn(isbn))
+		Set<BookDTO> booksDto = isbnSetForAllInputTags.stream().map(isbn -> bookRepository.findByIsbn(isbn))
 				.map(book -> mapEntityToDto(book)).collect(Collectors.toSet());
 
 		return booksDto;
+	}
+
+	private Set<Long> getSetOfIsbnForGivenTag(String tagName) {
+		Set<Long> isbnSetOfTag = new HashSet<>();
+		Tag tag = tagRepository.findByName(tagName);
+		if (Objects.nonNull(tag)) {
+			Set<Book> books = tag.getBooks();
+			for (Book book : books) {
+				isbnSetOfTag.add(book.getIsbn());
+			}
+		}
+		return isbnSetOfTag;
 	}
 
 	private boolean isBookAlreadyExist(Long isbn) {

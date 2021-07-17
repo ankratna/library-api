@@ -41,10 +41,10 @@ public class BookController {
 		return bookService.deleteBook(isbn);
 	}
 
-	@PostMapping("/getAllBooksWithTags")
+	@PostMapping("/searchBookWithTags")
 	@ResponseStatus(HttpStatus.OK)
-	public Set<BookDTO> getAllBooksWithTags(@RequestBody List<String> tags) {
-		return bookService.getAllBooksWithTags(tags);
+	public Set<BookDTO> getAllBooksWithAnyInputSearchTagPresent(@RequestBody List<String> tags) {
+		return bookService.getAllBooksWithAnyInputSearchTagPresent(tags);
 	}
 
 }
