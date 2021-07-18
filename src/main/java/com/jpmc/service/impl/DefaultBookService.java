@@ -13,9 +13,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.criteria.CriteriaQuery;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
 public class DefaultBookService implements BookService {
@@ -31,6 +36,9 @@ public class DefaultBookService implements BookService {
 	private final SearchStrategy searchWithAnyMatch;
 
 	private final SearchStrategy searchWithAllMatch;
+
+	@Autowired
+	private BookSpecification bookSpecification;
 
 	@Autowired
 	public DefaultBookService(BookRepository bookRepository, TagRepository tagRepository, BookMapper bookMapper,
@@ -106,8 +114,49 @@ public class DefaultBookService implements BookService {
 
 	@Override
 	public Set<BookDTO> search(BookDTO searchRequest) {
-		// need to implement
-		return null;
+
+		List<Specification<Book>> specs = new ArrayList<>();
+		if (Objects.nonNull(searchRequest.getIsbn())) {
+			specs.add(bookSpecification.findWithIsbn(searchRequest.getIsbn()));
+		}
+		if (Objects.nonNull(searchRequest.getTitle())) {
+			specs.add(bookSpecification.findWithTitle(searchRequest.getTitle()));
+		}
+		if (Objects.nonNull(searchRequest.getAuthor())) {
+			specs.add(bookSpecification.findWithAuthor(searchRequest.getAuthor()));
+		}
+		if (Objects.nonNull(searchRequest.getTags()) && searchRequest.getTags().size() > 0) {
+			specs.add(bookSpecification.findWithTags(new ArrayList<>(searchRequest.getTags())));
+		}
+
+		// specs.add(BookSpecification.findWithTitle("title"));
+		// specs.add(BookSpecification.findWithAuthor("author"));
+
+		Specification<Book> finalSpecs = where(specs.get(0));
+
+		for (int i = 1; i < specs.size(); i++) {
+			finalSpecs = finalSpecs.and(specs.get(i));
+		}
+
+		// Specification<Book> specification = where(createS)
+
+		/*
+		 *
+		 * where(bookSpecification.findWithTitle(searchRequest.getTitle())
+		 * .and(bookSpecification.findWithAuthor(searchRequest.getAuthor())))
+		 */
+
+		System.out.println("author = " + searchRequest.getAuthor() + "  title = " + searchRequest.getTitle());
+		return bookRepository.findAll(finalSpecs
+		/*
+		 * where(bookSpecification.findWithTitle(searchRequest.getTitle())
+		 * .and(bookSpecification.findWithAuthor(searchRequest.getAuthor())))
+		 */
+		).stream().map(book -> bookMapper.mapEntityToDto(book)).filter(bookDTO -> bookDTO.isPresent())
+				.map(bookDTO -> bookDTO.get()).collect(Collectors.toSet());
+
+		// return new HashSet<>(listOfBooks);
+
 	}
 
 	@Override
