@@ -5,6 +5,7 @@ import com.jpmc.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -82,6 +83,12 @@ public class BookController {
 	public BookDTO updateBook(Long isbn, @RequestBody BookDTO bookDTO) throws Exception {
 		System.out.println(bookDTO.toString());
 		return bookService.updateBook(isbn, bookDTO);
+	}
+
+	@PostMapping("/upload")
+	@ResponseStatus(HttpStatus.OK)
+	public String addBooks(@RequestPart(required = true) MultipartFile file) {
+		return bookService.uploadBooks(file);
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.jpmc.service;
 
 import com.jpmc.dto.BookDTO;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
@@ -26,5 +27,7 @@ public interface BookService {
 	public Set<BookDTO> searchByAuthor(String author);
 
 	public BookDTO updateBook(Long isbn, BookDTO bookDTO) throws Exception;
+
+	public String uploadBooks(MultipartFile file);
 
 }

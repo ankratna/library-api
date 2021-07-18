@@ -9,12 +9,16 @@ import com.jpmc.exception.BookNotFoundException;
 import com.jpmc.mapper.BookMapper;
 import com.jpmc.service.BookService;
 import com.jpmc.service.Search.SearchStrategy;
+import com.jpmc.util.CSVHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -77,6 +81,33 @@ public class DefaultBookService implements BookService {
 		bookMapper.mapDtoToEntity(bookDTO, book);
 		Book updatedBook = bookRepository.save(book);
 		return bookMapper.mapEntityToDto(updatedBook).get();
+	}
+
+	@Override
+	public String uploadBooks(MultipartFile file) {
+		StringBuilder message = new StringBuilder();
+
+		if (CSVHelper.hasCSVFormat(file)) {
+			try {
+				List<BookDTO> bookDTOS = CSVHelper.csvToBooks(file.getInputStream());
+				List<Book> books = new ArrayList<>();
+
+				for (BookDTO bookDTO : bookDTOS) {
+					Book book = new Book();
+					bookMapper.mapDtoToEntity(bookDTO, book);
+					books.add(book);
+				}
+				books.forEach(book -> System.out.println(book.toString()));
+				// System.out.println(books.toString());
+				bookRepository.saveAll(books);
+				return message.append("Uploaded the file successfully: " + file.getOriginalFilename()).toString();
+			}
+			catch (Exception e) {
+				return message.append("Could not upload the file: " + file.getOriginalFilename() + "!").toString();
+			}
+		}
+
+		return message.append("Please upload a csv file!").toString();
 	}
 
 	@Override
