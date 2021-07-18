@@ -56,6 +56,7 @@ public class BookController {
 	@PostMapping("/Search")
 	@ResponseStatus(HttpStatus.OK)
 	public Set<BookDTO> search(@RequestBody BookDTO searchRequest) {
+		System.out.println(searchRequest.toString());
 		return bookService.search(searchRequest);
 	}
 

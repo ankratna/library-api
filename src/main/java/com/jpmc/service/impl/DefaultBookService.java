@@ -125,19 +125,27 @@ public class DefaultBookService implements BookService {
 		if (Objects.nonNull(searchRequest.getAuthor())) {
 			specs.add(bookSpecification.findWithAuthor(searchRequest.getAuthor()));
 		}
+
+		List<String> inputTagList = new ArrayList<>();
 		if (Objects.nonNull(searchRequest.getTags()) && searchRequest.getTags().size() > 0) {
-			specs.add(bookSpecification.findWithTags(new ArrayList<>(searchRequest.getTags())));
+			inputTagList.addAll(searchRequest.getTags());
 		}
 
 		// specs.add(BookSpecification.findWithTitle("title"));
 		// specs.add(BookSpecification.findWithAuthor("author"));
 
-		Specification<Book> finalSpecs = where(specs.get(0));
+		if (specs.size() > 0) {
+			Specification<Book> finalSpecs = where(specs.get(0));
 
-		for (int i = 1; i < specs.size(); i++) {
-			finalSpecs = finalSpecs.and(specs.get(i));
+			for (int i = 1; i < specs.size(); i++) {
+				finalSpecs = finalSpecs.and(specs.get(i));
+			}
+
+			return bookRepository.findAll(finalSpecs).stream().map(book -> bookMapper.mapEntityToDto(book))
+					.filter(bookDTO -> bookDTO.isPresent()).map(bookDTO -> bookDTO.get())
+					.filter(bookDTO -> bookDTO.getTags().containsAll(inputTagList)).collect(Collectors.toSet());
 		}
-
+		return searchWithAllMatch.searchByTagList(inputTagList);
 		// Specification<Book> specification = where(createS)
 
 		/*
@@ -146,15 +154,26 @@ public class DefaultBookService implements BookService {
 		 * .and(bookSpecification.findWithAuthor(searchRequest.getAuthor())))
 		 */
 
-		System.out.println("author = " + searchRequest.getAuthor() + "  title = " + searchRequest.getTitle());
-		return bookRepository.findAll(finalSpecs
+		// System.out.println("author = " + searchRequest.getAuthor() + " title = " +
+		// searchRequest.getTitle());
+		/*
+		 * Set<String> tagSet = bookRepository.findAll(finalSpecs) .stream().map(book ->
+		 * bookMapper.mapEntityToDto(book)).filter(bookDTO -> bookDTO.isPresent())
+		 * .map(bookDTO -> bookDTO.get()) .map(bookDTO -> bookDTO.getTags())
+		 * .flatMap(tags->tags.stream()) .collect(Collectors.toSet());
+		 */
+		/*
+		 * .distinct() .collect(Collectors.toSet());
+		 */
+		/*
+		 * List<String> listOfTagsToQuery = new ArrayList<>(tagSet);
+		 * listOfTagsToQuery.addAll(inputTagList); return
+		 * searchWithAllMatch.searchByTagList(listOfTagsToQuery);
+		 */
 		/*
 		 * where(bookSpecification.findWithTitle(searchRequest.getTitle())
 		 * .and(bookSpecification.findWithAuthor(searchRequest.getAuthor())))
 		 */
-		).stream().map(book -> bookMapper.mapEntityToDto(book)).filter(bookDTO -> bookDTO.isPresent())
-				.map(bookDTO -> bookDTO.get()).collect(Collectors.toSet());
-
 		// return new HashSet<>(listOfBooks);
 
 	}

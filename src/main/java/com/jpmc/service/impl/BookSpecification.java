@@ -21,8 +21,9 @@ public class BookSpecification {
 		return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("author"), author);
 	}
 
-	public Specification<Book> findWithTags(List<String> tags) {
-		return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("tags"), tags);
-	}
+	/*
+	 * public Specification<Book> findWithTags(List<String> tags) { return (root, query,
+	 * criteriaBuilder) -> criteriaBuilder.equal(root.get("tags"), tags); }
+	 */
 
 }
