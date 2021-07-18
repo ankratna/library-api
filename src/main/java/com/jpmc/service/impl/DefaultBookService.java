@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DefaultBookService implements BookService {
@@ -29,13 +30,17 @@ public class DefaultBookService implements BookService {
 
 	private final SearchStrategy searchWithAnyMatch;
 
+	private final SearchStrategy searchWithAllMatch;
+
 	@Autowired
 	public DefaultBookService(BookRepository bookRepository, TagRepository tagRepository, BookMapper bookMapper,
-			@Qualifier("anyMatch") SearchStrategy searchWithAnyMatch) {
+			@Qualifier("anyMatch") SearchStrategy searchWithAnyMatch,
+			@Qualifier("allMatch") SearchStrategy searchWithAllMatch) {
 		this.bookRepository = bookRepository;
 		this.tagRepository = tagRepository;
 		this.bookMapper = bookMapper;
 		this.searchWithAnyMatch = searchWithAnyMatch;
+		this.searchWithAllMatch = searchWithAllMatch;
 	}
 
 	@Override
@@ -59,8 +64,10 @@ public class DefaultBookService implements BookService {
 		Set<BookDTO> allBooksDto = new HashSet<>();
 
 		bookRepository.findAll().stream().filter(book -> !book.getDeleted()).forEach(book -> {
-			BookDTO bookDTO = bookMapper.mapEntityToDto(book);
-			allBooksDto.add(bookDTO);
+			Optional<BookDTO> bookDTO = bookMapper.mapEntityToDto(book);
+			if (bookDTO.isPresent()) {
+				allBooksDto.add(bookDTO.get());
+			}
 		});
 
 		return allBooksDto;
@@ -88,8 +95,38 @@ public class DefaultBookService implements BookService {
 	}
 
 	@Override
-	public Set<BookDTO> getAllBooksWithAnyInputSearchTagPresent(List<String> tagNames) {
+	public Set<BookDTO> searchByAllTags(List<String> tagNames) {
+		return searchWithAllMatch.searchByTagList(tagNames);
+	}
+
+	@Override
+	public Set<BookDTO> searchByAnyTags(List<String> tagNames) {
 		return searchWithAnyMatch.searchByTagList(tagNames);
+	}
+
+	@Override
+	public Set<BookDTO> search(BookDTO searchRequest) {
+		// need to implement
+		return null;
+	}
+
+	@Override
+	public BookDTO searchByIsbn(Long isbn) {
+		Book book = bookRepository.findByIsbn(isbn);
+		Optional<BookDTO> bookDTO = bookMapper.mapEntityToDto(book);
+		return bookDTO.isPresent() ? bookDTO.get() : null;
+	}
+
+	@Override
+	public Set<BookDTO> searchByTitle(String title) {
+		return bookRepository.findByTitle(title).stream().map(book -> bookMapper.mapEntityToDto(book))
+				.filter(bookDTO -> bookDTO.isPresent()).map(bookDTO -> bookDTO.get()).collect(Collectors.toSet());
+	}
+
+	@Override
+	public Set<BookDTO> searchByAuthor(String author) {
+		return bookRepository.findByAuthor(author).stream().map(book -> bookMapper.mapEntityToDto(book))
+				.filter(bookDTO -> bookDTO.isPresent()).map(bookDTO -> bookDTO.get()).collect(Collectors.toSet());
 	}
 
 	private boolean isBookAlreadyExist(Long isbn) {

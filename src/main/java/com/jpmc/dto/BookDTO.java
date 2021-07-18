@@ -2,6 +2,7 @@ package com.jpmc.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@ToString
 public class BookDTO {
 
 	@NotNull(message = "isbn number can not be null")

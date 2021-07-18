@@ -29,7 +29,8 @@ public class SearchWithAllMatch implements SearchStrategy {
 	public Set<BookDTO> searchByTagList(List<String> tags) {
 		Set<String> tagsSet = new HashSet<>(tags);
 		return bookRepository.findAll().stream().filter(book -> getTagSet(book).containsAll(tags))
-				.map(book -> bookMapper.mapEntityToDto(book)).collect(Collectors.toSet());
+				.map(book -> bookMapper.mapEntityToDto(book)).filter(bookDTO -> bookDTO.isPresent())
+				.map(bookDTO -> bookDTO.get()).collect(Collectors.toSet());
 	}
 
 	private Set<String> getTagSet(Book book) {

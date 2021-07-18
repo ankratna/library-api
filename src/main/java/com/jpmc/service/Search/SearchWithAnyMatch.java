@@ -40,7 +40,8 @@ public class SearchWithAnyMatch implements SearchStrategy {
 		}
 
 		Set<BookDTO> booksDto = isbnSetForAllInputTags.stream().map(isbn -> bookRepository.findByIsbn(isbn))
-				.map(book -> bookMapper.mapEntityToDto(book)).collect(Collectors.toSet());
+				.map(book -> bookMapper.mapEntityToDto(book)).filter(bookDTO -> bookDTO.isPresent())
+				.map(bookDTO -> bookDTO.get()).collect(Collectors.toSet());
 
 		return booksDto;
 	}

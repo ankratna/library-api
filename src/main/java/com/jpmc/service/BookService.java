@@ -13,6 +13,16 @@ public interface BookService {
 
 	public String deleteBook(Long isbn) throws Exception;
 
-	public Set<BookDTO> getAllBooksWithAnyInputSearchTagPresent(List<String> tags);
+	public Set<BookDTO> searchByAllTags(List<String> tags);
+
+	public Set<BookDTO> searchByAnyTags(List<String> tags);
+
+	public Set<BookDTO> search(BookDTO bookDTO);
+
+	public BookDTO searchByIsbn(Long isbn);
+
+	public Set<BookDTO> searchByTitle(String title);
+
+	public Set<BookDTO> searchByAuthor(String author);
 
 }

@@ -11,4 +11,8 @@ public interface BookRepository extends CrudRepository<Book, Integer> {
 
 	public Set<Book> findAll();
 
+	public Set<Book> findByAuthor(String author);
+
+	public Set<Book> findByTitle(String title);
+
 }

@@ -41,16 +41,40 @@ public class BookController {
 		return bookService.deleteBook(isbn);
 	}
 
-	@PostMapping("/searchBookWithTags")
+	@PostMapping("/searchByAnyTag")
 	@ResponseStatus(HttpStatus.OK)
-	public Set<BookDTO> getAllBooksWithAnyInputSearchTagPresent(@RequestBody List<String> tags) {
-		return bookService.getAllBooksWithAnyInputSearchTagPresent(tags);
+	public Set<BookDTO> searchByAnyTags(@RequestBody List<String> tags) {
+		return bookService.searchByAnyTags(tags);
+	}
+
+	@PostMapping("/searchByAllTag")
+	@ResponseStatus(HttpStatus.OK)
+	public Set<BookDTO> searchByAllTags(@RequestBody List<String> tags) {
+		return bookService.searchByAllTags(tags);
 	}
 
 	@PostMapping("/Search")
 	@ResponseStatus(HttpStatus.OK)
-	public Set<BookDTO> searchByAnyField(@RequestBody BookDTO bookDTO) {
-		return null;
+	public Set<BookDTO> search(@RequestBody BookDTO searchRequest) {
+		return bookService.search(searchRequest);
+	}
+
+	@GetMapping("/searchByIsbn/{isbn}")
+	@ResponseStatus(HttpStatus.OK)
+	public BookDTO searchByIsbn(Long isbn) {
+		return bookService.searchByIsbn(isbn);
+	}
+
+	@GetMapping("/searchByTitle/{title}")
+	@ResponseStatus(HttpStatus.OK)
+	public Set<BookDTO> searchByIsbn(String title) {
+		return bookService.searchByTitle(title);
+	}
+
+	@GetMapping("/searchByAuthor/{author}")
+	@ResponseStatus(HttpStatus.OK)
+	public Set<BookDTO> searchByAuthor(String author) {
+		return bookService.searchByAuthor(author);
 	}
 
 }
