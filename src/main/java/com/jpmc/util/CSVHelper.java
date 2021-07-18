@@ -39,19 +39,20 @@ public class CSVHelper {
 			Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
 			for (CSVRecord csvRecord : csvRecords) {
-				BookDTO book = new BookDTO();
-				book.setIsbn(Long.parseLong(csvRecord.get(HEADERs[0])));
-				book.setAuthor(csvRecord.get(HEADERs[1]));
-				book.setTitle(csvRecord.get(HEADERs[2]));
-				HashSet<String> tags = new HashSet<>();
-				tags.add(csvRecord.get(HEADERs[3]));
-				book.setTags(tags);
+				int numberOfRecords = csvRecord.size();
+				System.out.println(numberOfRecords);
 
-				/*
-				 * new Tutorial( Long.parseLong(csvRecord.get("Id")),
-				 * csvRecord.get("Title"), csvRecord.get("Description"),
-				 * Boolean.parseBoolean(csvRecord.get("Published"))
-				 */
+				BookDTO book = new BookDTO();
+				book.setIsbn(Long.parseLong(csvRecord.get(0)));
+				book.setTitle(csvRecord.get(1));
+				book.setAuthor(csvRecord.get(2));
+				int currentRecordNumber = 3;
+				HashSet<String> tags = new HashSet<>();
+				while (currentRecordNumber < numberOfRecords) {
+					tags.add(csvRecord.get(currentRecordNumber));
+					currentRecordNumber++;
+				}
+				book.setTags(tags);
 				books.add(book);
 			}
 
