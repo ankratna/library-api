@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.criteria.CriteriaQuery;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -65,6 +63,20 @@ public class DefaultBookService implements BookService {
 
 		LOG.info(String.format("Book with isbn : %s successfully created", book.getIsbn()));
 		return bookDTO;
+	}
+
+	@Override
+	public BookDTO updateBook(Long isbn, BookDTO bookDTO) throws Exception {
+		Book book = bookRepository.findByIsbn(isbn);
+		if (Objects.isNull(book)) {
+			String message = String.format("Book with ISBN: %s does not exist", isbn);
+			LOG.warn(message);
+			throw new BookNotFoundException(message);
+		}
+		book.getTags().clear();
+		bookMapper.mapDtoToEntity(bookDTO, book);
+		Book updatedBook = bookRepository.save(book);
+		return bookMapper.mapEntityToDto(updatedBook).get();
 	}
 
 	@Override
@@ -131,9 +143,6 @@ public class DefaultBookService implements BookService {
 			inputTagList.addAll(searchRequest.getTags());
 		}
 
-		// specs.add(BookSpecification.findWithTitle("title"));
-		// specs.add(BookSpecification.findWithAuthor("author"));
-
 		if (specs.size() > 0) {
 			Specification<Book> finalSpecs = where(specs.get(0));
 
@@ -146,35 +155,6 @@ public class DefaultBookService implements BookService {
 					.filter(bookDTO -> bookDTO.getTags().containsAll(inputTagList)).collect(Collectors.toSet());
 		}
 		return searchWithAllMatch.searchByTagList(inputTagList);
-		// Specification<Book> specification = where(createS)
-
-		/*
-		 *
-		 * where(bookSpecification.findWithTitle(searchRequest.getTitle())
-		 * .and(bookSpecification.findWithAuthor(searchRequest.getAuthor())))
-		 */
-
-		// System.out.println("author = " + searchRequest.getAuthor() + " title = " +
-		// searchRequest.getTitle());
-		/*
-		 * Set<String> tagSet = bookRepository.findAll(finalSpecs) .stream().map(book ->
-		 * bookMapper.mapEntityToDto(book)).filter(bookDTO -> bookDTO.isPresent())
-		 * .map(bookDTO -> bookDTO.get()) .map(bookDTO -> bookDTO.getTags())
-		 * .flatMap(tags->tags.stream()) .collect(Collectors.toSet());
-		 */
-		/*
-		 * .distinct() .collect(Collectors.toSet());
-		 */
-		/*
-		 * List<String> listOfTagsToQuery = new ArrayList<>(tagSet);
-		 * listOfTagsToQuery.addAll(inputTagList); return
-		 * searchWithAllMatch.searchByTagList(listOfTagsToQuery);
-		 */
-		/*
-		 * where(bookSpecification.findWithTitle(searchRequest.getTitle())
-		 * .and(bookSpecification.findWithAuthor(searchRequest.getAuthor())))
-		 */
-		// return new HashSet<>(listOfBooks);
 
 	}
 

@@ -4,8 +4,6 @@ import com.jpmc.entity.Book;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 public class BookSpecification {
 
@@ -20,10 +18,5 @@ public class BookSpecification {
 	public Specification<Book> findWithAuthor(String author) {
 		return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("author"), author);
 	}
-
-	/*
-	 * public Specification<Book> findWithTags(List<String> tags) { return (root, query,
-	 * criteriaBuilder) -> criteriaBuilder.equal(root.get("tags"), tags); }
-	 */
 
 }

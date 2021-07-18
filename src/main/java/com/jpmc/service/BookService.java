@@ -25,4 +25,6 @@ public interface BookService {
 
 	public Set<BookDTO> searchByAuthor(String author);
 
+	public BookDTO updateBook(Long isbn, BookDTO bookDTO) throws Exception;
+
 }

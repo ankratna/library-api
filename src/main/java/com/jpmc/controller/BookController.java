@@ -56,7 +56,6 @@ public class BookController {
 	@PostMapping("/Search")
 	@ResponseStatus(HttpStatus.OK)
 	public Set<BookDTO> search(@RequestBody BookDTO searchRequest) {
-		System.out.println(searchRequest.toString());
 		return bookService.search(searchRequest);
 	}
 
@@ -76,6 +75,13 @@ public class BookController {
 	@ResponseStatus(HttpStatus.OK)
 	public Set<BookDTO> searchByAuthor(String author) {
 		return bookService.searchByAuthor(author);
+	}
+
+	@PutMapping("/updateBook/{isbn}")
+	@ResponseStatus(HttpStatus.OK)
+	public BookDTO updateBook(Long isbn, @RequestBody BookDTO bookDTO) throws Exception {
+		System.out.println(bookDTO.toString());
+		return bookService.updateBook(isbn, bookDTO);
 	}
 
 }
