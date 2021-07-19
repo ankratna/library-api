@@ -1,6 +1,8 @@
 package com.jpmc.controller;
 
 import com.jpmc.dto.BookDTO;
+import com.jpmc.exception.BookAlreadyExistException;
+import com.jpmc.exception.BookNotFoundException;
 import com.jpmc.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +26,7 @@ public class BookController {
 
 	@PostMapping("/addBook")
 	@ResponseStatus(HttpStatus.CREATED)
-	public BookDTO addBook(@Valid @RequestBody BookDTO bookDTO) throws Exception {
+	public BookDTO addBook(@Valid @RequestBody BookDTO bookDTO) throws BookAlreadyExistException {
 		return bookService.addBook(bookDTO);
 
 	}
@@ -37,8 +39,9 @@ public class BookController {
 
 	@DeleteMapping("/deleteBook/{isbn}")
 	@ResponseStatus(HttpStatus.OK)
+	// @ExceptionHandler(BookNotFoundException.class)
 	@ResponseBody
-	public String deleteBook(@PathVariable Long isbn) throws Exception {
+	public String deleteBook(@PathVariable Long isbn) throws BookNotFoundException {
 		return bookService.deleteBook(isbn);
 	}
 
@@ -80,7 +83,7 @@ public class BookController {
 
 	@PutMapping("/updateBook/{isbn}")
 	@ResponseStatus(HttpStatus.OK)
-	public BookDTO updateBook(Long isbn, @RequestBody BookDTO bookDTO) throws Exception {
+	public BookDTO updateBook(Long isbn, @RequestBody BookDTO bookDTO) throws BookNotFoundException {
 		System.out.println(bookDTO.toString());
 		return bookService.updateBook(isbn, bookDTO);
 	}

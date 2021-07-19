@@ -52,7 +52,7 @@ public class DefaultBookService implements BookService {
 	}
 
 	@Override
-	public BookDTO addBook(BookDTO bookDTO) throws Exception {
+	public BookDTO addBook(BookDTO bookDTO) throws BookAlreadyExistException {
 		if (isBookExist(bookDTO.getIsbn())) {
 			String message = String.format("Book already Exist in Database with isbn: %s", bookDTO.getIsbn());
 			LOG.warn(message);
@@ -68,7 +68,7 @@ public class DefaultBookService implements BookService {
 	}
 
 	@Override
-	public BookDTO updateBook(Long isbn, BookDTO bookDTO) throws Exception {
+	public BookDTO updateBook(Long isbn, BookDTO bookDTO) throws BookNotFoundException {
 		Book book = bookRepository.findByIsbn(isbn);
 		if (Objects.isNull(book)) {
 			String message = String.format("Book with ISBN: %s does not exist", isbn);
@@ -116,8 +116,8 @@ public class DefaultBookService implements BookService {
 	}
 
 	@Override
-	public String deleteBook(Long isbn) throws Exception {
-		Book book = bookRepository.findByIsbn((Long) isbn);
+	public String deleteBook(Long isbn) throws BookNotFoundException {
+		Book book = bookRepository.findByIsbn(isbn);
 
 		if (Objects.isNull(book)) {
 			String message = String.format("Book with ISBN: %s does not exist", isbn);
