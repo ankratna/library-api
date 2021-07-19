@@ -30,7 +30,7 @@
 6. open h2-database console here : http://localhost:8002/h2-console
 7. use swagger to test application.
 
-**Instruction to upload csv : ** first line of csv file should br HEADER, and csv should be in the order(Isbn,Author,Title,Tags(tag list can be any length with comma separated))
+**Instruction to upload csv :** first line of csv file should br HEADER, and csv should be in the order(Isbn,Author,Title,Tags(tag list can be any length with comma separated))
 
 
 
