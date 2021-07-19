@@ -68,7 +68,7 @@ public class BookController {
 
 	@GetMapping("/searchByTitle/{title}")
 	@ResponseStatus(HttpStatus.OK)
-	public Set<BookDTO> searchByIsbn(String title) {
+	public Set<BookDTO> searchByTitle(String title) {
 		return bookService.searchByTitle(title);
 	}
 
@@ -85,7 +85,7 @@ public class BookController {
 		return bookService.updateBook(isbn, bookDTO);
 	}
 
-	@PostMapping("/upload")
+	@PostMapping("/uploadBooks")
 	@ResponseStatus(HttpStatus.OK)
 	public String addBooks(@RequestPart(required = true) MultipartFile file) {
 		return bookService.uploadBooks(file);

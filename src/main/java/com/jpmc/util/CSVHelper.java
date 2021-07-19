@@ -1,7 +1,6 @@
 package com.jpmc.util;
 
 import com.jpmc.dto.BookDTO;
-import com.jpmc.entity.Book;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -44,8 +43,8 @@ public class CSVHelper {
 
 				BookDTO book = new BookDTO();
 				book.setIsbn(Long.parseLong(csvRecord.get(0)));
-				book.setTitle(csvRecord.get(1));
-				book.setAuthor(csvRecord.get(2));
+				book.setAuthor(csvRecord.get(1));
+				book.setTitle(csvRecord.get(2));
 				int currentRecordNumber = 3;
 				HashSet<String> tags = new HashSet<>();
 				while (currentRecordNumber < numberOfRecords) {

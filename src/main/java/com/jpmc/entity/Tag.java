@@ -16,7 +16,7 @@ public class Tag implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tag_sequence")
-	@SequenceGenerator(name = "course_sequence", sequenceName = "tag_sequence")
+	@SequenceGenerator(name = "tag_sequence", sequenceName = "tag_sequence")
 	private Integer id;
 
 	@Column(nullable = false)

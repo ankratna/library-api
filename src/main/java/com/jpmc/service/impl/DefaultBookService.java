@@ -17,8 +17,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -55,7 +53,7 @@ public class DefaultBookService implements BookService {
 
 	@Override
 	public BookDTO addBook(BookDTO bookDTO) throws Exception {
-		if (isBookAlreadyExist(bookDTO.getIsbn())) {
+		if (isBookExist(bookDTO.getIsbn())) {
 			String message = String.format("Book already Exist in Database with isbn: %s", bookDTO.getIsbn());
 			LOG.warn(message);
 			throw new BookAlreadyExistException(message);
@@ -90,16 +88,9 @@ public class DefaultBookService implements BookService {
 		if (CSVHelper.hasCSVFormat(file)) {
 			try {
 				List<BookDTO> bookDTOS = CSVHelper.csvToBooks(file.getInputStream());
-				List<Book> books = new ArrayList<>();
-
 				for (BookDTO bookDTO : bookDTOS) {
-					Book book = new Book();
-					bookMapper.mapDtoToEntity(bookDTO, book);
-					books.add(book);
+					addBook(bookDTO);
 				}
-				books.forEach(book -> System.out.println(book.toString()));
-				// System.out.println(books.toString());
-				bookRepository.saveAll(books);
 				return message.append("Uploaded the file successfully: " + file.getOriginalFilename()).toString();
 			}
 			catch (Exception e) {
@@ -208,7 +199,7 @@ public class DefaultBookService implements BookService {
 				.filter(bookDTO -> bookDTO.isPresent()).map(bookDTO -> bookDTO.get()).collect(Collectors.toSet());
 	}
 
-	private boolean isBookAlreadyExist(Long isbn) {
+	private boolean isBookExist(Long isbn) {
 		Book book = bookRepository.findByIsbn(isbn);
 		return Objects.nonNull(book) && !book.getDeleted();
 	}
