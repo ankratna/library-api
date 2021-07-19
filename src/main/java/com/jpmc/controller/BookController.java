@@ -65,7 +65,7 @@ public class BookController {
 
 	@GetMapping("/searchByIsbn/{isbn}")
 	@ResponseStatus(HttpStatus.OK)
-	public BookDTO searchByIsbn(Long isbn) {
+	public BookDTO searchByIsbn(Long isbn) throws BookNotFoundException {
 		return bookService.searchByIsbn(isbn);
 	}
 

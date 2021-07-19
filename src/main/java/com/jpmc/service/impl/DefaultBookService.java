@@ -181,10 +181,13 @@ public class DefaultBookService implements BookService {
 	}
 
 	@Override
-	public BookDTO searchByIsbn(Long isbn) {
+	public BookDTO searchByIsbn(Long isbn) throws BookNotFoundException {
 		Book book = bookRepository.findByIsbn(isbn);
 		Optional<BookDTO> bookDTO = bookMapper.mapEntityToDto(book);
-		return bookDTO.isPresent() ? bookDTO.get() : null;
+		if (!bookDTO.isPresent()) {
+			throw (new BookNotFoundException("Book not found"));
+		}
+		return bookDTO.get();
 	}
 
 	@Override

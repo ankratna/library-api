@@ -22,7 +22,7 @@ public interface BookService {
 
 	public Set<BookDTO> search(BookDTO bookDTO);
 
-	public BookDTO searchByIsbn(Long isbn);
+	public BookDTO searchByIsbn(Long isbn) throws BookNotFoundException;
 
 	public Set<BookDTO> searchByTitle(String title);
 
