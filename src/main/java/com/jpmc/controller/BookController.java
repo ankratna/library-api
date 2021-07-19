@@ -39,7 +39,6 @@ public class BookController {
 
 	@DeleteMapping("/deleteBook/{isbn}")
 	@ResponseStatus(HttpStatus.OK)
-	// @ExceptionHandler(BookNotFoundException.class)
 	@ResponseBody
 	public String deleteBook(@PathVariable Long isbn) throws BookNotFoundException {
 		return bookService.deleteBook(isbn);
@@ -57,7 +56,7 @@ public class BookController {
 		return bookService.searchByAllTags(tags);
 	}
 
-	@PostMapping("/Search")
+	@PostMapping("/search")
 	@ResponseStatus(HttpStatus.OK)
 	public Set<BookDTO> search(@RequestBody BookDTO searchRequest) {
 		return bookService.search(searchRequest);
@@ -65,26 +64,25 @@ public class BookController {
 
 	@GetMapping("/searchByIsbn/{isbn}")
 	@ResponseStatus(HttpStatus.OK)
-	public BookDTO searchByIsbn(Long isbn) throws BookNotFoundException {
+	public BookDTO searchByIsbn(@PathVariable Long isbn) throws BookNotFoundException {
 		return bookService.searchByIsbn(isbn);
 	}
 
 	@GetMapping("/searchByTitle/{title}")
 	@ResponseStatus(HttpStatus.OK)
-	public Set<BookDTO> searchByTitle(String title) {
+	public Set<BookDTO> searchByTitle(@PathVariable String title) {
 		return bookService.searchByTitle(title);
 	}
 
 	@GetMapping("/searchByAuthor/{author}")
 	@ResponseStatus(HttpStatus.OK)
-	public Set<BookDTO> searchByAuthor(String author) {
+	public Set<BookDTO> searchByAuthor(@PathVariable String author) {
 		return bookService.searchByAuthor(author);
 	}
 
 	@PutMapping("/updateBook/{isbn}")
 	@ResponseStatus(HttpStatus.OK)
-	public BookDTO updateBook(Long isbn, @RequestBody BookDTO bookDTO) throws BookNotFoundException {
-		System.out.println(bookDTO.toString());
+	public BookDTO updateBook(@PathVariable Long isbn, @RequestBody BookDTO bookDTO) throws BookNotFoundException {
 		return bookService.updateBook(isbn, bookDTO);
 	}
 
