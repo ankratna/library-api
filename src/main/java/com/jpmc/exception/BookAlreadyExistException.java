@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Book already exist")
 public class BookAlreadyExistException extends Exception {
 
-	public BookAlreadyExistException(String message) {
-		super(message);
-	}
+    public BookAlreadyExistException(String message) {
+        super(message);
+    }
 
 }

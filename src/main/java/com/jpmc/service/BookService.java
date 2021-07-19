@@ -10,26 +10,26 @@ import java.util.Set;
 
 public interface BookService {
 
-	public BookDTO addBook(BookDTO bookDTO) throws BookAlreadyExistException;
+    public BookDTO addBook(BookDTO bookDTO) throws BookAlreadyExistException;
 
-	public Set<BookDTO> getAllBooks();
+    public Set<BookDTO> getAllBooks();
 
-	public String deleteBook(Long isbn) throws BookNotFoundException;
+    public String deleteBook(Long isbn) throws BookNotFoundException;
 
-	public Set<BookDTO> searchByAllTags(List<String> tags);
+    public Set<BookDTO> searchByAllTags(List<String> tags);
 
-	public Set<BookDTO> searchByAnyTags(List<String> tags);
+    public Set<BookDTO> searchByAnyTags(List<String> tags);
 
-	public Set<BookDTO> search(BookDTO bookDTO);
+    public Set<BookDTO> search(BookDTO bookDTO);
 
-	public BookDTO searchByIsbn(Long isbn) throws BookNotFoundException;
+    public BookDTO searchByIsbn(Long isbn) throws BookNotFoundException;
 
-	public Set<BookDTO> searchByTitle(String title);
+    public Set<BookDTO> searchByTitle(String title);
 
-	public Set<BookDTO> searchByAuthor(String author);
+    public Set<BookDTO> searchByAuthor(String author);
 
-	public BookDTO updateBook(Long isbn, BookDTO bookDTO) throws BookNotFoundException;
+    public BookDTO updateBook(Long isbn, BookDTO bookDTO) throws BookNotFoundException;
 
-	public String uploadBooks(MultipartFile file);
+    public String uploadBooks(MultipartFile file);
 
 }

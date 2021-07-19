@@ -16,25 +16,32 @@ import java.util.stream.Collectors;
 @Qualifier("allMatch")
 public class SearchWithAllMatch implements SearchStrategy {
 
-	private final BookRepository bookRepository;
+    private final BookRepository bookRepository;
 
-	private final BookMapper bookMapper;
+    private final BookMapper bookMapper;
 
-	public SearchWithAllMatch(BookRepository bookRepository, BookMapper bookMapper) {
-		this.bookRepository = bookRepository;
-		this.bookMapper = bookMapper;
-	}
+    public SearchWithAllMatch(BookRepository bookRepository, BookMapper bookMapper) {
+        this.bookRepository = bookRepository;
+        this.bookMapper = bookMapper;
+    }
 
-	@Override
-	public Set<BookDTO> searchByTagList(List<String> tags) {
-		Set<String> tagsSet = new HashSet<>(tags);
-		return bookRepository.findAll().stream().filter(book -> getTagSet(book).containsAll(tags))
-				.map(book -> bookMapper.mapEntityToDto(book)).filter(bookDTO -> bookDTO.isPresent())
-				.map(bookDTO -> bookDTO.get()).collect(Collectors.toSet());
-	}
+    @Override
+    public Set<BookDTO> searchByTagList(List<String> tags) {
+        Set<String> tagsSet = new HashSet<>(tags);
+        return bookRepository.findAll()
+                .stream()
+                .filter(book -> getTagSet(book).containsAll(tags))
+                .map(book -> bookMapper.mapEntityToDto(book))
+                .filter(bookDTO -> bookDTO.isPresent())
+                .map(bookDTO -> bookDTO.get())
+                .collect(Collectors.toSet());
+    }
 
-	private Set<String> getTagSet(Book book) {
-		return book.getTags().stream().map(tag -> tag.getName()).collect(Collectors.toSet());
-	}
+    private Set<String> getTagSet(Book book) {
+        return book.getTags()
+                .stream()
+                .map(tag -> tag.getName())
+                .collect(Collectors.toSet());
+    }
 
 }

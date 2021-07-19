@@ -19,43 +19,47 @@ import java.util.stream.Collectors;
 @Qualifier("anyMatch")
 public class SearchWithAnyMatch implements SearchStrategy {
 
-	private final BookRepository bookRepository;
+    private final BookRepository bookRepository;
 
-	private final BookMapper bookMapper;
+    private final BookMapper bookMapper;
 
-	private final TagRepository tagRepository;
+    private final TagRepository tagRepository;
 
-	public SearchWithAnyMatch(BookRepository bookRepository, BookMapper bookMapper, TagRepository tagRepository) {
-		this.bookRepository = bookRepository;
-		this.bookMapper = bookMapper;
-		this.tagRepository = tagRepository;
-	}
+    public SearchWithAnyMatch(BookRepository bookRepository, BookMapper bookMapper, TagRepository tagRepository) {
+        this.bookRepository = bookRepository;
+        this.bookMapper = bookMapper;
+        this.tagRepository = tagRepository;
+    }
 
-	@Override
-	public Set<BookDTO> searchByTagList(List<String> tagNames) {
-		Set<Long> isbnSetForAllInputTags = new HashSet<>();
-		for (String tagName : tagNames) {
-			Set<Long> isbnSetForTag = getSetOfIsbnForGivenTag(tagName);
-			isbnSetForAllInputTags.addAll(isbnSetForTag);
-		}
+    @Override
+    public Set<BookDTO> searchByTagList(List<String> tagNames) {
+        Set<Long> isbnSetForAllInputTags = new HashSet<>();
+        for (String tagName : tagNames) {
+            Set<Long> isbnSetForTag = getSetOfIsbnForGivenTag(tagName);
+            isbnSetForAllInputTags.addAll(isbnSetForTag);
+        }
 
-		Set<BookDTO> booksDto = isbnSetForAllInputTags.stream().map(isbn -> bookRepository.findByIsbn(isbn))
-				.map(book -> bookMapper.mapEntityToDto(book)).filter(bookDTO -> bookDTO.isPresent())
-				.map(bookDTO -> bookDTO.get()).collect(Collectors.toSet());
+        Set<BookDTO> booksDto = isbnSetForAllInputTags
+                .stream()
+                .map(isbn -> bookRepository.findByIsbn(isbn))
+                .map(book -> bookMapper.mapEntityToDto(book))
+                .filter(bookDTO -> bookDTO.isPresent())
+                .map(bookDTO -> bookDTO.get())
+                .collect(Collectors.toSet());
 
-		return booksDto;
-	}
+        return booksDto;
+    }
 
-	private Set<Long> getSetOfIsbnForGivenTag(String tagName) {
-		Set<Long> isbnSetOfTag = new HashSet<>();
-		Tag tag = tagRepository.findByName(tagName);
-		if (Objects.nonNull(tag)) {
-			Set<Book> books = tag.getBooks();
-			for (Book book : books) {
-				isbnSetOfTag.add(book.getIsbn());
-			}
-		}
-		return isbnSetOfTag;
-	}
+    private Set<Long> getSetOfIsbnForGivenTag(String tagName) {
+        Set<Long> isbnSetOfTag = new HashSet<>();
+        Tag tag = tagRepository.findByName(tagName);
+        if (Objects.nonNull(tag)) {
+            Set<Book> books = tag.getBooks();
+            for (Book book : books) {
+                isbnSetOfTag.add(book.getIsbn());
+            }
+        }
+        return isbnSetOfTag;
+    }
 
 }

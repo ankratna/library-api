@@ -14,16 +14,16 @@ import java.util.Set;
 @Table(name = "TAG")
 public class Tag implements Serializable {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tag_sequence")
-	@SequenceGenerator(name = "tag_sequence", sequenceName = "tag_sequence")
-	private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tag_sequence")
+    @SequenceGenerator(name = "tag_sequence", sequenceName = "tag_sequence")
+    private Integer id;
 
-	@Column(nullable = false)
-	private String name;
+    @Column(nullable = false)
+    private String name;
 
-	@ManyToMany(mappedBy = "tags")
-	@JsonIgnore
-	private Set<Book> books;
+    @ManyToMany(mappedBy = "tags")
+    @JsonIgnore
+    private Set<Book> books;
 
 }

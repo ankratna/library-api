@@ -10,14 +10,14 @@ import java.util.Set;
 
 public interface BookRepository extends CrudRepository<Book, Integer>, JpaSpecificationExecutor<Book> {
 
-	public Book findByIsbn(Long isbn);
+    public Book findByIsbn(Long isbn);
 
-	public Set<Book> findAll();
+    public Set<Book> findAll();
 
-	public Set<Book> findByAuthor(String author);
+    public Set<Book> findByAuthor(String author);
 
-	public Set<Book> findByTitle(String title);
+    public Set<Book> findByTitle(String title);
 
-	public List<Book> findAll(Specification<Book> spec);
+    public List<Book> findAll(Specification<Book> spec);
 
 }

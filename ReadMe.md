@@ -21,7 +21,7 @@
 7. Design pattern : Strategy and Dependency Injection 
 
 **How to install and run**
-1. Install Java8.
+1. Install Java8 ans maven.
 2. Clone git repository by clicking here : https://github.com/ankratna/library-api
   (or run : git clone https://github.com/ankratna/library-api.git)   
 3. run: mvn clean install

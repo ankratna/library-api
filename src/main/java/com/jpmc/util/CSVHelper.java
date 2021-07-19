@@ -16,50 +16,48 @@ import java.util.List;
 
 public class CSVHelper {
 
-	public static String TYPE = "text/csv";
-	static String[] HEADERs = { "Isbn", "Author", "Title", "Tags" };
+    public static String TYPE = "text/csv";
+    static String[] HEADERs = {"Isbn", "Author", "Title", "Tags"};
 
-	public static boolean hasCSVFormat(MultipartFile file) {
+    public static boolean hasCSVFormat(MultipartFile file) {
 
-		if (!TYPE.equals(file.getContentType())) {
-			return false;
-		}
+        if (!TYPE.equals(file.getContentType())) {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	public static List<BookDTO> csvToBooks(InputStream is) {
-		try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-				CSVParser csvParser = new CSVParser(fileReader,
-						CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
+    public static List<BookDTO> csvToBooks(InputStream is) {
+        try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+             CSVParser csvParser = new CSVParser(fileReader,
+                     CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
 
-			List<BookDTO> books = new ArrayList<>();
+            List<BookDTO> books = new ArrayList<>();
 
-			Iterable<CSVRecord> csvRecords = csvParser.getRecords();
+            Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
-			for (CSVRecord csvRecord : csvRecords) {
-				int numberOfRecords = csvRecord.size();
-				System.out.println(numberOfRecords);
+            for (CSVRecord csvRecord : csvRecords) {
+                int numberOfRecords = csvRecord.size();
 
-				BookDTO book = new BookDTO();
-				book.setIsbn(Long.parseLong(csvRecord.get(0)));
-				book.setAuthor(csvRecord.get(1));
-				book.setTitle(csvRecord.get(2));
-				int currentRecordNumber = 3;
-				HashSet<String> tags = new HashSet<>();
-				while (currentRecordNumber < numberOfRecords) {
-					tags.add(csvRecord.get(currentRecordNumber));
-					currentRecordNumber++;
-				}
-				book.setTags(tags);
-				books.add(book);
-			}
+                BookDTO book = new BookDTO();
+                book.setIsbn(Long.parseLong(csvRecord.get(0)));
+                book.setAuthor(csvRecord.get(1));
+                book.setTitle(csvRecord.get(2));
+                int currentRecordNumber = 3;
+                HashSet<String> tags = new HashSet<>();
+                while (currentRecordNumber < numberOfRecords) {
+                    tags.add(csvRecord.get(currentRecordNumber));
+                    currentRecordNumber++;
+                }
+                book.setTags(tags);
+                books.add(book);
+            }
 
-			return books;
-		}
-		catch (IOException e) {
-			throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
-		}
-	}
+            return books;
+        } catch (IOException e) {
+            throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
+        }
+    }
 
 }

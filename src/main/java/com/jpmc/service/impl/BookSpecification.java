@@ -7,16 +7,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class BookSpecification {
 
-	public Specification<Book> findWithTitle(String title) {
-		return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("title"), title);
-	}
+    public Specification<Book> findWithTitle(String title) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("title"), title);
+    }
 
-	public Specification<Book> findWithIsbn(Long isbn) {
-		return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("isbn"), isbn);
-	}
+    public Specification<Book> findWithIsbn(Long isbn) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("isbn"), isbn);
+    }
 
-	public Specification<Book> findWithAuthor(String author) {
-		return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("author"), author);
-	}
+    public Specification<Book> findWithAuthor(String author) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("author"), author);
+    }
 
 }

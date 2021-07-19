@@ -13,15 +13,15 @@ import java.util.Set;
 @ToString
 public class BookDTO {
 
-	@NotNull(message = "isbn number can not be null")
-	private Long isbn;
+    @NotNull(message = "isbn number can not be null")
+    private Long isbn;
 
-	@NotNull(message = "title of book can not be null")
-	private String title;
+    @NotNull(message = "title of book can not be null")
+    private String title;
 
-	@NotNull(message = "author of can not be null")
-	private String author;
+    @NotNull(message = "author of can not be null")
+    private String author;
 
-	private Set<String> tags = new HashSet();
+    private Set<String> tags = new HashSet();
 
 }

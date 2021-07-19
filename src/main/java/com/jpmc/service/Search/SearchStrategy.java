@@ -9,6 +9,6 @@ import java.util.Set;
 @Component
 public interface SearchStrategy {
 
-	public Set<BookDTO> searchByTagList(List<String> tags);
+    public Set<BookDTO> searchByTagList(List<String> tags);
 
 }

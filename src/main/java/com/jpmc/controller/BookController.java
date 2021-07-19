@@ -17,79 +17,79 @@ import java.util.Set;
 @RequestMapping("/book")
 public class BookController {
 
-	private final BookService bookService;
+    private final BookService bookService;
 
-	@Autowired
-	public BookController(BookService bookService) {
-		this.bookService = bookService;
-	}
+    @Autowired
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
 
-	@PostMapping("/addBook")
-	@ResponseStatus(HttpStatus.CREATED)
-	public BookDTO addBook(@Valid @RequestBody BookDTO bookDTO) throws BookAlreadyExistException {
-		return bookService.addBook(bookDTO);
+    @PostMapping("/addBook")
+    @ResponseStatus(HttpStatus.CREATED)
+    public BookDTO addBook(@Valid @RequestBody BookDTO bookDTO) throws BookAlreadyExistException {
+        return bookService.addBook(bookDTO);
 
-	}
+    }
 
-	@GetMapping("/getAllBooks")
-	@ResponseStatus(HttpStatus.OK)
-	public Set<BookDTO> getAllBooks() {
-		return bookService.getAllBooks();
-	}
+    @GetMapping("/getAllBooks")
+    @ResponseStatus(HttpStatus.OK)
+    public Set<BookDTO> getAllBooks() {
+        return bookService.getAllBooks();
+    }
 
-	@DeleteMapping("/deleteBook/{isbn}")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public String deleteBook(@PathVariable Long isbn) throws BookNotFoundException {
-		return bookService.deleteBook(isbn);
-	}
+    @DeleteMapping("/deleteBook/{isbn}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public String deleteBook(@PathVariable Long isbn) throws BookNotFoundException {
+        return bookService.deleteBook(isbn);
+    }
 
-	@PostMapping("/searchByAnyTag")
-	@ResponseStatus(HttpStatus.OK)
-	public Set<BookDTO> searchByAnyTags(@RequestBody List<String> tags) {
-		return bookService.searchByAnyTags(tags);
-	}
+    @PostMapping("/searchByAnyTag")
+    @ResponseStatus(HttpStatus.OK)
+    public Set<BookDTO> searchByAnyTags(@RequestBody List<String> tags) {
+        return bookService.searchByAnyTags(tags);
+    }
 
-	@PostMapping("/searchByAllTag")
-	@ResponseStatus(HttpStatus.OK)
-	public Set<BookDTO> searchByAllTags(@RequestBody List<String> tags) {
-		return bookService.searchByAllTags(tags);
-	}
+    @PostMapping("/searchByAllTag")
+    @ResponseStatus(HttpStatus.OK)
+    public Set<BookDTO> searchByAllTags(@RequestBody List<String> tags) {
+        return bookService.searchByAllTags(tags);
+    }
 
-	@PostMapping("/search")
-	@ResponseStatus(HttpStatus.OK)
-	public Set<BookDTO> search(@RequestBody BookDTO searchRequest) {
-		return bookService.search(searchRequest);
-	}
+    @PostMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public Set<BookDTO> search(@RequestBody BookDTO searchRequest) {
+        return bookService.search(searchRequest);
+    }
 
-	@GetMapping("/searchByIsbn/{isbn}")
-	@ResponseStatus(HttpStatus.OK)
-	public BookDTO searchByIsbn(@PathVariable Long isbn) throws BookNotFoundException {
-		return bookService.searchByIsbn(isbn);
-	}
+    @GetMapping("/searchByIsbn/{isbn}")
+    @ResponseStatus(HttpStatus.OK)
+    public BookDTO searchByIsbn(@PathVariable Long isbn) throws BookNotFoundException {
+        return bookService.searchByIsbn(isbn);
+    }
 
-	@GetMapping("/searchByTitle/{title}")
-	@ResponseStatus(HttpStatus.OK)
-	public Set<BookDTO> searchByTitle(@PathVariable String title) {
-		return bookService.searchByTitle(title);
-	}
+    @GetMapping("/searchByTitle/{title}")
+    @ResponseStatus(HttpStatus.OK)
+    public Set<BookDTO> searchByTitle(@PathVariable String title) {
+        return bookService.searchByTitle(title);
+    }
 
-	@GetMapping("/searchByAuthor/{author}")
-	@ResponseStatus(HttpStatus.OK)
-	public Set<BookDTO> searchByAuthor(@PathVariable String author) {
-		return bookService.searchByAuthor(author);
-	}
+    @GetMapping("/searchByAuthor/{author}")
+    @ResponseStatus(HttpStatus.OK)
+    public Set<BookDTO> searchByAuthor(@PathVariable String author) {
+        return bookService.searchByAuthor(author);
+    }
 
-	@PutMapping("/updateBook/{isbn}")
-	@ResponseStatus(HttpStatus.OK)
-	public BookDTO updateBook(@PathVariable Long isbn, @RequestBody BookDTO bookDTO) throws BookNotFoundException {
-		return bookService.updateBook(isbn, bookDTO);
-	}
+    @PutMapping("/updateBook/{isbn}")
+    @ResponseStatus(HttpStatus.OK)
+    public BookDTO updateBook(@PathVariable Long isbn, @RequestBody BookDTO bookDTO) throws BookNotFoundException {
+        return bookService.updateBook(isbn, bookDTO);
+    }
 
-	@PostMapping("/uploadBooks")
-	@ResponseStatus(HttpStatus.OK)
-	public String addBooks(@RequestPart(required = true) MultipartFile file) {
-		return bookService.uploadBooks(file);
-	}
+    @PostMapping("/uploadBooks")
+    @ResponseStatus(HttpStatus.OK)
+    public String addBooks(@RequestPart(required = true) MultipartFile file) {
+        return bookService.uploadBooks(file);
+    }
 
 }
